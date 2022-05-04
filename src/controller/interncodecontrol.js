@@ -1,5 +1,5 @@
 const internmodel = require("../module/internmodel");
-const collegemodel=require('../module/collegemodel')
+const collegemodel = require('../module/collegemodel')
 
 const createintrn = async function (req, res) {
     try {
@@ -34,20 +34,25 @@ const createintrn = async function (req, res) {
     }
 }
 //============================================================[API:FOR GETTING LIST OF COLLEGE]=============================================
-let getcollege=async (req,res)=>{
-    try{
-        let data=req.query.collegename
-        if(Object.keys(data)===0) return res.status(400).send({ status: false, msg: "enter college name" })
-        let search=await collegemodel.findOne({name:data})
-        let clgid=search._id.toString()
-        let intern=await internmodel.find({collegeId:clgid})
-        res.status(201).send({ status: true, msg:intern })
-
+let getcollege = async (req, res) => {
+    try {
+        let data = req.query.collegename
+        if (Object.keys(data) === 0) return res.status(400).send({ status: false, msg: "enter college name" })
+        let search = await collegemodel.findOne({ name: data })
+        let clgid = search._id.toString()
+        let intern = await internmodel.find({ collegeId: clgid })
+        let op = {
+            name: search.name,
+            fullName: search.fullName,
+            logoLink: search.logoLink,
+            interest: intern
+        }
+        res.status(201).send({ status: true, msg: op })
     }
-catch(err){
-    res.status(500).send({status:false,msg:err.message})
-}
+    catch (err) {
+        res.status(500).send({ status: false, msg: err.message })
+    }
 }
 
-module.exports.createintrn=createintrn
-module.exports.getcollege=getcollege 
+module.exports.createintrn = createintrn
+module.exports.getcollege = getcollege 
