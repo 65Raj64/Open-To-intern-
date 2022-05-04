@@ -6,7 +6,7 @@ const success = (res, status, msg) => {
 const unsuccess = (res, status, msg) => {
     return res.status(status).send({ status: false, msg: msg })
 }
-
+//=================================================[API:FOR CREATING COLLGE]=======================================================
 const createcollege = async (req, res) => {
     try{
     let data = req.body

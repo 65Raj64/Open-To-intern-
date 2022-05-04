@@ -1,6 +1,7 @@
 const internmodel = require("../module/internmodel");
 const collegemodel = require('../module/collegemodel')
 
+//====================================================[API:CREATE-INTERN]================================================================
 const createintrn = async function (req, res) {
     try {
         let data = req.body
@@ -12,8 +13,8 @@ const createintrn = async function (req, res) {
         if (!email.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
             return res.status(404).send({ status: false, data: "Invalid email" })
         }
-        if (!mobile) return res.status(400).send({ status: false, msg: "mobile cannot be empty" })
-        if (!mobile.match(/^\d{10}$/)) return res.status(400).send({ status: false, msg: "mobile no invalid" })
+        if (!mobile) return res.status(400).send({ status: false, msg: "mobile-no cannot be empty" })
+        if (!mobile.match(/^\d{10}$/)) return res.status(400).send({ status: false, msg: "mobile-no invalid" })
         if (!collegeId) return res.status(400).send({ status: false, msg: "collegeId cannot be empty" })
         if (isDeleted) {
             if (typeof isDeleted !== 'boolean')
@@ -40,15 +41,17 @@ let getcollege = async (req, res) => {
         let data = req.query.collegename
         if (Object.keys(data) === 0) return res.status(400).send({ status: false, msg: "enter college name" })
         let search = await collegemodel.findOne({ name: data })
+        if (!search) return res.status(404).send({ status: false, msg: "College does not exists" })
         let clgid = search._id.toString()
         let intern = await internmodel.find({ collegeId: clgid })
+        if (intern.length == 0) return res.status(404).send({ status: false, msg: "no interns applied for college" })
         let op = {
             name: search.name,
             fullName: search.fullName,
             logoLink: search.logoLink,
             interest: intern
         }
-        res.status(201).send({ status: true, data: op })
+        res.status(200).send({ status: true, data: op })
     }
     catch (err) {
         res.status(500).send({ status: false, msg: err.message })
