@@ -5,6 +5,7 @@ const createintrn = async function (req, res) {
     try {
         let data = req.body
         const { name, email, mobile, collegeId, isDeleted } = data
+        if (Object.keys(data) === 0) return res.status(400).send({ status: false, msg: "enter intern details" })
         if (!name) return res.status(400).send({ status: false, msg: "name cannot be empty" })
         if (!name.match(/^[a-z]+$/i)) return res.status(400).send({ status: false, msg: "name is Invalid" })
         if (!email) return res.status(400).send({ status: false, msg: "email cannot be empty" })
@@ -47,7 +48,7 @@ let getcollege = async (req, res) => {
             logoLink: search.logoLink,
             interest: intern
         }
-        res.status(201).send({ status: true, msg: op })
+        res.status(201).send({ status: true, data: op })
     }
     catch (err) {
         res.status(500).send({ status: false, msg: err.message })

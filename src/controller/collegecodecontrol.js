@@ -11,6 +11,7 @@ const createcollege = async (req, res) => {
     try{
     let data = req.body
     const { name, fullName, logoLink, isDeleted } = data
+    if(Object.keys(data)===0) return res.status(400).send({ status: false, msg: "enter college details" })
     if (!name) return unsuccess(res, 400, "name is required")
     if (!name.match(/^[a-z]+$/i)) return unsuccess(res, 400, "name is Invalid")
     if (!fullName) return unsuccess(res, 400, "fullName is required")
