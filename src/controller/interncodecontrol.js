@@ -38,23 +38,24 @@ const createintrn = async function (req, res) {
 //============================================================[API:FOR GETTING LIST OF COLLEGE]=============================================
 let getcollege = async (req, res) => {
     try {
-        let data = req.query.collegename
+        let data = req.query.collegename.toUpperCase()
         if (!data) return res.status(400).send({ status: false, msg: "enter college name" })
         if (!data.match(/^[a-z]+$/i)) return res.status(400).send({ status: false, msg: "enter valid college name" })
         let search = await collegemodel.findOne({ name: data })
         if (!search) return res.status(404).send({ status: false, msg: "College does not exists" })
         if (search.isDeleted === true) return res.status(404).send({ status: false, msg: "College data is deleted" })
         let clgid = search._id.toString()
-        let intern = await internmodel.find({ collegeId: clgid })
-        let intdata = intern.filter((x) => x.isDeleted === false)
-        if (intern.length == 0) return res.status(404).send({ status: false, msg: "No interns applied for this college" })
+        let intern = await internmodel.find({ collegeId: clgid, isDeleted: false }).select({ collegeId: 0, isDeleted: 0, __v: 0 })
+        if (intern.length == 0) {
+            intern.push("No interns applied for this college")
+        }
         let op = {
             name: search.name,
             fullName: search.fullName,
             logoLink: search.logoLink,
-            interest: intdata
+            interest: intern
         }
-        res.status(200).send({ status: true, data: op })
+        res.status(200).send({ data: op })
     }
     catch (err) {
         res.status(500).send({ status: false, msg: err.message })
