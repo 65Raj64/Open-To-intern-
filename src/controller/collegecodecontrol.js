@@ -14,9 +14,11 @@ const createcollege = async (req, res) => {
     let { name, fullName, logoLink, isDeleted } = data
     if(Object.keys(data)===0) return res.status(400).send({ status: false, msg: "enter college details" })
     if (!name) return unsuccess(res, 400, "name is required")
-    if (!name.match(/^[a-z]+$/i)) return unsuccess(res, 400, "name is Invalid")
+    if (!name.match(/^[#.a-zA-Z\s,-]+$/)) return unsuccess(res, 400, "name is Invalid")
     if (!fullName) return unsuccess(res, 400, "fullName is required")
+    if (!fullName.match(/^[#.0-9a-zA-Z\s,-]+$/)) return unsuccess(res, 400, "fullName is invalid")
     if (!logoLink) return unsuccess(res, 400, "logoLink is required")
+    if (!logoLink.match(/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/)) return unsuccess(res, 400, "logoLink is invalid")
     if(isDeleted){
     if (typeof isDeleted !== 'boolean') return unsuccess(res, 400, "isDeleted is true or false type only")
     }
