@@ -39,17 +39,20 @@ const createintrn = async function (req, res) {
 let getcollege = async (req, res) => {
     try {
         let data = req.query.collegename
-        if (Object.keys(data) === 0) return res.status(400).send({ status: false, msg: "enter college name" })
+        if (!data) return res.status(400).send({ status: false, msg: "enter college name" })
+        if (!data.match(/^[a-z]+$/i)) return res.status(400).send({ status: false, msg: "enter valid college name" })
         let search = await collegemodel.findOne({ name: data })
         if (!search) return res.status(404).send({ status: false, msg: "College does not exists" })
+        if (search.isDeleted === true) return res.status(404).send({ status: false, msg: "College data is deleted" })
         let clgid = search._id.toString()
         let intern = await internmodel.find({ collegeId: clgid })
-        if (intern.length == 0) return res.status(404).send({ status: false, msg: "no interns applied for college" })
+        let intdata = intern.filter((x) => x.isDeleted === false)
+        if (intern.length == 0) return res.status(404).send({ status: false, msg: "No interns applied for this college" })
         let op = {
             name: search.name,
             fullName: search.fullName,
             logoLink: search.logoLink,
-            interest: intern
+            interest: intdata
         }
         res.status(200).send({ status: true, data: op })
     }
