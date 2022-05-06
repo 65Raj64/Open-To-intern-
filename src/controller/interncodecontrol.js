@@ -29,7 +29,7 @@ const createintrn = async function (req, res) {
             return res.status(400).send({ status: false, msg: "Enter valid college ID" })
 
         const createdintrn = await internmodel.create(data)
-        res.status(201).send({ status: true, msg: createdintrn })
+        res.status(201).send({ status: true, data: createdintrn })
     }
     catch (error) {
         res.status(500).send({ status: false, msg: error.message })
