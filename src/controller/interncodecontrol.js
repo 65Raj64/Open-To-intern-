@@ -6,7 +6,7 @@ const createintrn = async function (req, res) {
     try {
         let data = req.body
         const { name, email, mobile, collegeName, isDeleted } = data
-        if (Object.keys(data) === 0) return res.status(400).send({ status: false, msg: "enter intern details" })
+        if (Object.keys(data).length === 0) return res.status(400).send({ status: false, msg: "enter intern details" })
         if (!name) return res.status(400).send({ status: false, msg: "name cannot be empty" })
         if (!name.match(/^[#.a-zA-Z\s,-]+$/)) return res.status(400).send({ status: false, msg: "name is Invalid" })
         if (!email) return res.status(400).send({ status: false, msg: "email cannot be empty" })
