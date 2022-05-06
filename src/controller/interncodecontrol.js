@@ -35,10 +35,10 @@ const createintrn = async function (req, res) {
         res.status(500).send({ status: false, msg: error.message })
     }
 }
-//============================================================[API:FOR GETTING LIST OF COLLEGE]=============================================
+//=====================================================[API:FOR GETTING LIST OF COLLEGE]=============================================
 let getcollege = async (req, res) => {
     try {
-        let data = req.query.collegename.toUpperCase()
+        let data = req.query.collegename
         if (!data) return res.status(400).send({ status: false, msg: "enter college name" })
         if (!data.match(/^[a-z]+$/i)) return res.status(400).send({ status: false, msg: "enter valid college name" })
         let search = await collegemodel.findOne({ name: data })

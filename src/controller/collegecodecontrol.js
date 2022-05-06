@@ -10,7 +10,7 @@ const unsuccess = (res, status, msg) => {
 const createcollege = async (req, res) => {
     try{
     let data = req.body
-    data.name=data.name.toUpperCase()
+    
     let { name, fullName, logoLink, isDeleted } = data
     if(Object.keys(data)===0) return res.status(400).send({ status: false, msg: "enter college details" })
     if (!name) return unsuccess(res, 400, "name is required")
