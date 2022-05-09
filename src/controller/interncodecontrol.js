@@ -59,7 +59,7 @@ let getcollege = async (req, res) => {
             name: search.name,
             fullName: search.fullName,
             logoLink: search.logoLink,
-            interest: intern
+            interns: intern
         }
         res.status(200).send({ data: op })
     }
